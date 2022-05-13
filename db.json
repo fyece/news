@@ -1,0 +1,88 @@
+{
+  "articles": [
+    {
+      "id": 1,
+      "authorId": 1,
+      "title": "Shhhht",
+      "content": "content",
+      "author": "Samuel"
+    },
+    {
+      "id": 2,
+      "authorId": 1,
+      "title": "JUST hello",
+      "content": "There is some content hellow",
+      "author": "Jack"
+    },
+    {
+      "id": 3,
+      "authorId": 1,
+      "title": "Hello world",
+      "content": "There is some content2",
+      "author": "Samuel"
+    },
+    {
+      "id": 4,
+      "authorId": 1,
+      "title": "Hello world",
+      "content": "content",
+      "author": "Samuel"
+    },
+    {
+      "id": 5,
+      "authorId": 2,
+      "title": "Hello new world",
+      "content": "There is some content",
+      "author": "Jack"
+    },
+    {
+      "id": 6,
+      "authorId": 1,
+      "title": "Hello world",
+      "content": "There is some content",
+      "author": "Samuel"
+    },
+    {
+      "id": 7,
+      "authorId": 2,
+      "title": "Hello news",
+      "content": "There is some news conteeeent",
+      "author": "Jack"
+    },
+    {
+      "id": 8,
+      "authorId": 3,
+      "title": "Some science",
+      "content": "There is some science content",
+      "author": "Rick"
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "name": "Samuel",
+      "writtenPostsId": [
+        1,
+        3,
+        4,
+        6
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Jack",
+      "writtenPostsId": [
+        2,
+        5,
+        7
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Rick",
+      "writtenPostsId": [
+        8
+      ]
+    }
+  ]
+}
