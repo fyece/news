@@ -16,6 +16,14 @@ export const articleApi = createApi({
       }),
       providesTags: (result) => ["Article"],
     }),
+
+    // getArticleByAuthor: build.query<IArticle, number>({
+    //   query: (authorId) => ({
+    //     url: `articles?authorId=${authorId}`,
+    //   }),
+    //   providesTags: (result) => ["Article"],
+    // }),
+
     createArticle: build.mutation<IArticle, IArticle>({
       query: (article: IArticle) => ({
         url: `articles/`,
@@ -24,6 +32,7 @@ export const articleApi = createApi({
       }),
       invalidatesTags: ["Article"],
     }),
+
     deleteArticle: build.mutation<IArticle, IArticle>({
       query: (article: IArticle) => ({
         url: `articles/${article.id}`,
@@ -31,6 +40,7 @@ export const articleApi = createApi({
       }),
       invalidatesTags: ["Article"],
     }),
+
     updateArticle: build.mutation<IArticle, IArticle>({
       query: (article: IArticle) => ({
         url: `articles/${article.id}`,

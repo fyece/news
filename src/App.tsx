@@ -1,25 +1,51 @@
-import React, { useEffect } from 'react';
-import { fetchUsers } from './store/user/user.actions';
-import { useAppDispatch, useAppSelector } from './utils/hooks/redux';
-import { articleApi } from './services/article.service';
-import ArticleList from './components/layout/ArticlesList/ArticleList';
+import React, { useState } from "react"
+import ArticleList from "./components/layout/ArticlesList/ArticleList"
+import Appbar from "./components/layout/Appbar/Appbar"
+import {
+  Box,
+  createTheme,
+  Grid,
+  PaletteMode,
+  ThemeProvider,
+} from "@mui/material"
+import Navbar from "./components/layout/Navbar/Navbar"
+import Rightbar from "./components/layout/Rightbar/Rightbar"
 
-function App() {
-  // const dispatch = useAppDispatch()
-  // useEffect(() => {
-  //   dispatch(fetchUsers())
-  // }, [dispatch])
-  // const { users, isLoading, error } = useAppSelector(
-  //   (state) => state.userReducer
-  // )
+const App = () => {
+  const [mode, setMode] = useState<PaletteMode>("dark")
+
+  const darkTheme = createTheme({
+    palette: {
+      mode: mode,
+    },
+    shape: {
+      borderRadius: 6,
+    },
+    // typography: {
+    //   fontSize: 14,
+    // },
+  })
+
   return (
-    <div className="App">
-      {/* {isLoading && <p>LOADING...</p>}
-      {users.length > 0 && JSON.stringify(users, null, 4)}
-      {error && <p>{error}</p>} */}
-      <ArticleList />
-    </div>
-  );
+    <ThemeProvider theme={darkTheme}>
+      <Box bgcolor={"background.default"} color={"text.primary"}>
+        <Appbar />
+        <Grid container spacing={2}>
+          <Grid item xs={3}>
+            <Navbar mode={mode} setMode={setMode} />
+          </Grid>
+          {/* choose between 5 and 6 grid size */}
+          <Grid item xs={5}>
+            <ArticleList />
+          </Grid>
+          <Grid item xs={3}>
+            {/* some content */}
+            <Rightbar />
+          </Grid>
+        </Grid>
+      </Box>
+    </ThemeProvider>
+  )
 }
 
-export default App;
+export default App
