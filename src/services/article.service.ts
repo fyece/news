@@ -7,10 +7,11 @@ export const articleApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000/" }),
   tagTypes: ["Article"],
   endpoints: (build) => ({
-    getAllArticles: build.query<IArticle[], number>({
-      query: (limit = 5) => ({
+    getArticles: build.query<IArticle[], number[]>({
+      query: ([page = 1, limit = 10]) => ({
         url: `articles/`,
         params: {
+          _page: page,
           _limit: limit,
         },
       }),

@@ -1,6 +1,6 @@
 import React from "react"
-import logo from "../../assets/Navigation/logo.svg"
-import burger from "../../assets/Navigation/burger.svg"
+import logo from "../../assets/navigation/logo.svg"
+import burger from "../../assets/navigation/burger.svg"
 import { Box } from "@mui/material"
 
 const LogoWithBurger = () => {

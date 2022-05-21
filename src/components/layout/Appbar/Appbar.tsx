@@ -28,7 +28,6 @@ const Appbar = () => {
         <Toolbar>
           <Grid
             container
-            // spacing={2}
             display={"flex"}
             alignItems={"center"}
             justifyContent={"center"}

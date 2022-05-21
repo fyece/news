@@ -12,23 +12,21 @@ import Navbar from "./components/layout/Navbar/Navbar"
 import Rightbar from "./components/layout/Rightbar/Rightbar"
 
 const App = () => {
-  const [mode, setMode] = useState<PaletteMode>("dark")
+  const [mode, setMode] = useState<PaletteMode>("light")
 
   const darkTheme = createTheme({
     palette: {
       mode: mode,
     },
-    shape: {
-      borderRadius: 6,
-    },
-    // typography: {
-    //   fontSize: 14,
-    // },
   })
 
   return (
     <ThemeProvider theme={darkTheme}>
-      <Box bgcolor={"background.default"} color={"text.primary"}>
+      <Box
+        bgcolor={"background.default"}
+        color={"text.primary"}
+        sx={{ minHeight: "100vh" }}
+      >
         <Appbar />
         <Grid container spacing={2}>
           <Grid item xs={3}>

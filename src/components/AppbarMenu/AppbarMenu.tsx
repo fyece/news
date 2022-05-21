@@ -1,8 +1,9 @@
 import React from "react"
 import { Avatar, Button, Menu, MenuItem } from "@mui/material"
 import avatar from "../../assets/thumbnail/avatarKitty.jpg"
+import LoginButton from "../LoginButton/LoginButton"
 
-const isLogined = true
+const isLogined = false
 
 function AppbarMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
@@ -19,7 +20,7 @@ function AppbarMenu() {
       {isLogined ? (
         <Avatar src={avatar} onClick={handleClick} />
       ) : (
-        <Button>Войти</Button>
+        <LoginButton />
       )}
       <Menu
         elevation={0}
