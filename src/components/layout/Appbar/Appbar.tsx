@@ -1,27 +1,17 @@
 import React from "react"
-import { AppBar, Button, Grid, styled, Toolbar } from "@mui/material"
-import LogoWithBurger from "../../LogoWithBurger/LogoWtihBurger"
+import { AppBar, Box, Button, Grid, styled, Toolbar } from "@mui/material"
 import AddIcon from "@mui/icons-material/Add"
+
+import LogoWithBurger from "../../LogoWithBurger/LogoWtihBurger"
 import SearchBar from "../../Search/SearchBar"
-import { articleApi } from "../../../services/article.service"
-import { IArticle } from "../../../types/IArticle"
 import AppbarMenu from "../../AppbarMenu/AppbarMenu"
+import CreateArticleButton from "../../CreateArticleButton/CreateArticleButton"
 
 const StyledAppbar = styled(AppBar)({
   boxShadow: "none",
 })
 
 const Appbar = () => {
-  const [createArticle, { error: createError }] =
-    articleApi.useCreateArticleMutation()
-  const handleCreateArticle = async () => {
-    const authorId = Number(prompt("authorId"))
-    const title = prompt("title") || "untilted"
-    const content = prompt("content") || "empty"
-    const author = prompt("atuthor name") || "unknown"
-    await createArticle({ authorId, title, content, author } as IArticle)
-  }
-
   return (
     <>
       <StyledAppbar position="sticky">
@@ -30,22 +20,24 @@ const Appbar = () => {
             container
             display={"flex"}
             alignItems={"center"}
-            justifyContent={"center"}
+            justifyContent={"space-between"}
           >
-            <Grid item xs={3}>
+            <Grid
+              item
+              xs={5}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
               <LogoWithBurger />
-            </Grid>
-            <Grid item xs={5} display={"flex"} justifyContent={"space-between"}>
+
               <SearchBar />
-              <Button
-                variant="contained"
-                startIcon={<AddIcon />}
-                onClick={handleCreateArticle}
-              >
-                Создать
-              </Button>
+              <CreateArticleButton />
             </Grid>
-            <Grid item xs={4} display={"flex"} justifyContent={"flex-end"}>
+
+            <Grid item xs={2} display={"flex"} justifyContent={"flex-end"}>
               <AppbarMenu />
             </Grid>
           </Grid>

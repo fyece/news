@@ -1,7 +1,18 @@
-import React from "react"
-import { styled, alpha } from "@mui/system"
+import React, { useState } from "react"
+import {
+  styled,
+  alpha,
+  Box,
+  Paper,
+  List,
+  ListItem,
+  ListItemButton,
+} from "@mui/material"
 import { InputBase } from "@mui/material"
-import { SearchOutlined } from "@mui/icons-material"
+import { IArticle } from "../../types/types"
+import NavLinkStyled from "../common/NavLinkStyled/NavLinkStyled"
+import { useAppDispatch, useAppSelector } from "../../utils/hooks/redux"
+import { searchArticle } from "../../store/article/article.actions"
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -10,12 +21,10 @@ const Search = styled("div")(({ theme }) => ({
   "&:hover": {
     backgroundColor: alpha(theme.palette.common.white, 0.25),
   },
-  // marginRight: theme.spacing(2),
-  // marginLeft: 0,
+
   width: "100%",
   [theme.breakpoints.up("sm")]: {
-    // marginLeft: theme.spacing(3),
-    width: "auto",
+    width: "320px",
   },
 }))
 
@@ -32,9 +41,7 @@ const SearchIconWrapper = styled("div")(({ theme }) => ({
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: "inherit",
   "& .MuiInputBase-input": {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    padding: theme.spacing(1, 1, 1, 1),
     // transition: theme.transitions.create("width"),
     width: "100%",
     [theme.breakpoints.up("md")]: {
@@ -43,19 +50,77 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }))
 
+function useOutsideAlerter(ref: any, setOpen: (open: boolean) => void) {
+  React.useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (ref.current && !ref.current.contains(event.target)) {
+        setOpen(false)
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [ref, setOpen])
+}
+
 function SearchBar() {
+  const wrapperRef = React.useRef(null)
+  const [open, setOpen] = useState(false)
+  useOutsideAlerter(wrapperRef, setOpen)
+
+  const dispatch = useAppDispatch()
+  const [searchValue, setSearchValue] = React.useState("")
+  const [articles, setArticles] = React.useState<IArticle[]>()
+  const handleChangeInput = async (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setOpen(true)
+    setSearchValue(e.target.value)
+    try {
+      await dispatch(searchArticle({ title: e.target.value }))
+    } catch (err) {
+      console.warn(err)
+    }
+  }
+
+  const articlesData = useAppSelector(
+    (state) => state.articleReducer.searchingArticles
+  )
+
+  React.useEffect(() => {
+    setArticles(articlesData)
+  }, [articlesData])
+
+  const articlesElements = articles?.map((a) => {
+    return (
+      <ListItem key={a.id} sx={{ px: "0" }}>
+        <NavLinkStyled to={`articles/${a.id}`}>
+          <ListItemButton>{a.title}</ListItemButton>
+        </NavLinkStyled>
+      </ListItem>
+    )
+  })
+
   return (
-    <>
+    <Box>
       <Search>
-        <SearchIconWrapper>
-          <SearchOutlined />
-        </SearchIconWrapper>
         <StyledInputBase
           placeholder="Поиск"
+          value={searchValue}
+          onChange={handleChangeInput}
           inputProps={{ "aria-label": "search" }}
         />
       </Search>
-    </>
+      {open && articles && articles.length > 0 && (
+        <Paper
+          ref={wrapperRef}
+          sx={{ position: "absolute", top: "50px", width: "320px" }}
+        >
+          <List>{articlesElements}</List>
+        </Paper>
+      )}
+    </Box>
   )
 }
 

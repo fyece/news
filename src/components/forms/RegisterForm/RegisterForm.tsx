@@ -2,7 +2,10 @@ import React, { FC } from "react"
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
-import { Box, Button, Stack, TextField } from "@mui/material"
+import { useCookies } from "react-cookie"
+import { Box, Button, Stack, TextField, Typography } from "@mui/material"
+import { register as registerUser } from "../../../store/auth/auth.actions"
+import { useAppDispatch, useAppSelector } from "../../../utils/hooks/redux"
 
 interface IFormInputs {
   fullName: string
@@ -12,7 +15,11 @@ interface IFormInputs {
 
 const schema = yup
   .object({
-    fullName: yup.string().required("Необходимо ввести имя"),
+    fullName: yup
+      .string()
+      .min(4, "Имя пользователя должно содержать не мене 4 символов")
+      .max(64, "Имя пользователя должно содержать не больше 64 символов")
+      .required("Необходимо ввести имя"),
     email: yup
       .string()
       .email("Некорректный email")
@@ -26,6 +33,10 @@ interface IProps {
 }
 
 const RegisterForm: FC<IProps> = ({ toLogin }) => {
+  const [cookies, setCookie] = useCookies(["token"])
+  const dispatch = useAppDispatch()
+  const userData = useAppSelector((state) => state.authReducer.user)
+
   const {
     register,
     handleSubmit,
@@ -33,44 +44,71 @@ const RegisterForm: FC<IProps> = ({ toLogin }) => {
   } = useForm<IFormInputs>({
     resolver: yupResolver(schema),
   })
-  const onSubmit = (data: IFormInputs) => console.log(data)
+
+  const onSubmit = async (data: IFormInputs) => {
+    await dispatch(registerUser(data))
+    setCookie("token", userData?.token, {
+      path: "/",
+      maxAge: 30 * 24 * 60 * 60,
+    })
+  }
 
   return (
-    <Box>
+    <Stack spacing={4}>
+      <Typography variant="h5" sx={{ fontWeight: 500 }}>
+        Зарегистрироваться
+      </Typography>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Stack>
+        <Stack
+          spacing={3}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
           <TextField
             error={errors.fullName ? true : false}
-            id="standard-basic"
+            fullWidth
             label="Имя"
-            variant="standard"
+            variant="outlined"
             helperText={errors.fullName?.message}
             {...register("fullName")}
           />
+
           <TextField
             error={errors.email ? true : false}
-            id="standard-basic"
+            fullWidth
             label="Email"
-            variant="standard"
+            variant="outlined"
             helperText={errors.email?.message}
             {...register("email")}
           />
 
           <TextField
             error={errors.password ? true : false}
-            id="standard-basic"
+            fullWidth
             label="Пароль"
-            variant="standard"
+            variant="outlined"
             type="password"
             helperText={errors.password?.message}
             {...register("password")}
           />
 
-          <Button type="submit">Зарегистрироваться</Button>
-          <Button onClick={toLogin}>Войти</Button>
+          <Button
+            type="submit"
+            variant="contained"
+            size="large"
+            disableElevation
+            sx={{ width: "fit-content" }}
+          >
+            Зарегистрироваться
+          </Button>
+          <Button size="small" disableElevation onClick={toLogin}>
+            Войти
+          </Button>
         </Stack>
       </form>
-    </Box>
+    </Stack>
   )
 }
 

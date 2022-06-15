@@ -1,48 +1,31 @@
-import React, { useState } from "react"
-import { Skeleton, Stack, Typography } from "@mui/material"
-import { articleApi } from "../../../services/article.service"
-import Article from "../../Article/Article"
-import { useAppDispatch } from "../../../utils/hooks/redux"
+import React, { useEffect } from "react"
+import { Skeleton, Stack } from "@mui/material"
+
+import ArticleItem from "../../ArticleItem/ArticleItem"
+import { useAppDispatch, useAppSelector } from "../../../utils/hooks/redux"
 import { fetchArticles } from "../../../store/article/article.actions"
+import { IArticle } from "../../../types/types"
 
-const ArticleList = () => {
-  const [page, setPage] = useState(1)
-  const limit = 5
+interface IArticleListProps {
+  articles: IArticle[]
+}
 
-  const [updateArticle, {}] = articleApi.useUpdateArticleMutation()
-  const [removeArticle, {}] = articleApi.useDeleteArticleMutation()
-  const { data, error, isLoading } = articleApi.useGetArticlesQuery([
-    page,
-    limit,
-  ])
-
-  // const data = useAppDispatch(fetchArticles([page, limit]))
-
-  const articlesElements = data?.map((article) => (
-    <Article
-      key={article.id}
-      article={article}
-      update={updateArticle}
-      remove={removeArticle}
-    />
-  ))
+const ArticleList: React.FC<IArticleListProps> = ({ articles }) => {
+  const articlesElements = articles?.map((article) => {
+    return (
+      <ArticleItem
+        key={article.id}
+        id={article.id}
+        title={article.title}
+        description={article.description}
+        views={article.views}
+      />
+    )
+  })
 
   return (
     <>
-      <Typography sx={{ color: "gray", marginTop: 2 }}>Статьи</Typography>
-      {isLoading ? (
-        //
-        // skeleton on loading
-        //
-        <Skeleton
-          variant="rectangular"
-          width={"100%"}
-          height={"100%"}
-          sx={{ minHeight: "100vh" }}
-        />
-      ) : null}
-      {error ? <div>error</div> : null}
-      <Stack>{articlesElements}</Stack>
+      <Stack spacing={2}>{articlesElements}</Stack>
     </>
   )
 }

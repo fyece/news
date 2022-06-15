@@ -1,20 +1,21 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { IArticle } from "../../types/IArticle"
-import { deleteArticle, fetchArticles, updateArticle } from "./article.actions"
-
-function findIndexByItemId(array: IArticle[], id: number) {
-  const el = array.filter((item) => item.id === id)
-  return array.indexOf(el[0])
-}
+import { IArticle } from "../../types/types"
+import { fetchArticles, getArticleById, searchArticle } from "./article.actions"
 
 interface IArticleState {
   articles: IArticle[]
+  searchingArticles: IArticle[]
+  currentArticle: IArticle | null
+  total: number
   isLoading: boolean
   error: string
 }
 
 const initialState: IArticleState = {
   articles: [],
+  searchingArticles: [],
+  currentArticle: null,
+  total: 0,
   isLoading: false,
   error: "",
 }
@@ -26,11 +27,12 @@ export const articleSlice = createSlice({
   extraReducers: {
     [fetchArticles.fulfilled.type]: (
       state,
-      action: PayloadAction<IArticle[]>
+      action: PayloadAction<{ items: IArticle[]; total: number }>
     ) => {
       state.isLoading = false
       state.error = ""
-      state.articles = action.payload
+      state.articles = action.payload.items
+      state.total = action.payload.total
     },
     [fetchArticles.pending.type]: (state) => {
       state.isLoading = true
@@ -40,28 +42,36 @@ export const articleSlice = createSlice({
       state.error = action.payload
     },
 
-    [updateArticle.fulfilled.type]: (
+    [getArticleById.fulfilled.type]: (
       state,
       action: PayloadAction<IArticle>
     ) => {
-      const articleIndex = findIndexByItemId(state.articles, action.payload.id)
       state.isLoading = false
       state.error = ""
-      state.articles[articleIndex] = action.payload
+      state.currentArticle = action.payload
     },
-    [updateArticle.pending.type]: (state) => {
+    [getArticleById.pending.type]: (state) => {
       state.isLoading = true
     },
-    [updateArticle.rejected.type]: (state, action: PayloadAction<string>) => {
+    [getArticleById.rejected.type]: (state, action: PayloadAction<string>) => {
       state.isLoading = false
       state.error = action.payload
     },
 
-    [deleteArticle.fulfilled.type]: (state, action: PayloadAction<number>) => {
-      const index = findIndexByItemId(state.articles, action.payload)
+    [searchArticle.fulfilled.type]: (
+      state,
+      action: PayloadAction<{ items: IArticle[]; total: number }>
+    ) => {
       state.isLoading = false
       state.error = ""
-      state.articles = state.articles.splice(index, 1)
+      state.searchingArticles = action.payload.items
+    },
+    [searchArticle.pending.type]: (state) => {
+      state.isLoading = true
+    },
+    [searchArticle.rejected.type]: (state, action: PayloadAction<string>) => {
+      state.isLoading = false
+      state.error = action.payload
     },
   },
 })

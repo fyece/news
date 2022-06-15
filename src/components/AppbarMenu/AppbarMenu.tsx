@@ -1,11 +1,13 @@
 import React from "react"
 import { Avatar, Button, Menu, MenuItem } from "@mui/material"
-import avatar from "../../assets/thumbnail/avatarKitty.jpg"
 import LoginButton from "../LoginButton/LoginButton"
-
-const isLogined = false
+import { useAppDispatch, useAppSelector } from "../../utils/hooks/redux"
+import NavLinkStyled from "../common/NavLinkStyled/NavLinkStyled"
+import { logout } from "../../store/auth/auth.slice"
+import AvatarColored from "../common/AvatarColored/AvatarColored"
 
 function AppbarMenu() {
+  const userData = useAppSelector((state) => state.authReducer.user) || null
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -14,11 +16,20 @@ function AppbarMenu() {
   const handleClose = () => {
     setAnchorEl(null)
   }
+  const dispatch = useAppDispatch()
+  const onLogout = () => {
+    dispatch(logout())
+    setAnchorEl(null)
+  }
 
   return (
     <>
-      {isLogined ? (
-        <Avatar src={avatar} onClick={handleClick} />
+      {userData && userData.fullName ? (
+        <AvatarColored
+          fullName={userData.fullName}
+          onClick={handleClick}
+          variant="circular"
+        />
       ) : (
         <LoginButton />
       )}
@@ -36,10 +47,13 @@ function AppbarMenu() {
         open={open}
         onClose={handleClose}
       >
-        <MenuItem>Профиль</MenuItem>
-        <MenuItem>Закладки</MenuItem>
-        <MenuItem>Настройки</MenuItem>
-        <MenuItem>Выход</MenuItem>
+        <MenuItem>
+          <NavLinkStyled to="/profile">Профиль</NavLinkStyled>
+        </MenuItem>
+        <MenuItem>
+          <NavLinkStyled to="/settings">Настройки</NavLinkStyled>
+        </MenuItem>
+        <MenuItem onClick={onLogout}>Выход</MenuItem>
       </Menu>
     </>
   )

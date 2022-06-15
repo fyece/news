@@ -2,6 +2,7 @@ import React, { FC } from "react"
 import {
   styled,
   Box,
+  Link,
   List,
   ListItem,
   ListItemButton,
@@ -17,20 +18,28 @@ import {
   FormatListBulleted,
   BookmarkBorderOutlined,
   DarkModeOutlined,
+  Settings,
 } from "@mui/icons-material"
+import { NavLink } from "react-router-dom"
 
 const StyledListItemButton = styled(ListItemButton)(({ theme }) => ({
   borderRadius: theme.shape.borderRadius,
   "&:hover": {
-    // borderRadius: theme.shape.borderRadius,
+    borderRadius: theme.shape.borderRadius,
   },
 }))
 
 const StyledListItem = styled(ListItem)({
   marginTop: -12,
-  "&:first-child": {
+  "&:first-of-type": {
     marginTop: 0,
   },
+})
+
+const StyledLink = styled(NavLink)({
+  color: "inherit",
+  textDecoration: "none",
+  width: "100%",
 })
 
 interface IProps {
@@ -46,50 +55,49 @@ const Navbar: FC<IProps> = ({ mode, setMode }) => {
 
   return (
     <Box>
-      <List sx={{ width: "70%", maxWidth: 360, bgcolor: "background.paper" }}>
+      <List>
         <StyledListItem>
-          <StyledListItemButton>
-            <ListItemIcon>
-              <PersonOutlineOutlined />
-            </ListItemIcon>
-            <ListItemText primary="Мой профиль" />
-          </StyledListItemButton>
+          <StyledLink to="/profile">
+            <StyledListItemButton>
+              <ListItemIcon>
+                <PersonOutlineOutlined />
+              </ListItemIcon>
+              <ListItemText primary="Мой профиль" sx={{ ml: -2 }} />
+            </StyledListItemButton>
+          </StyledLink>
         </StyledListItem>
 
         <StyledListItem>
-          <StyledListItemButton>
-            <ListItemIcon>
-              <FeedOutlined />
-            </ListItemIcon>
-            <ListItemText primary=" Моя лента" />
-          </StyledListItemButton>
+          <StyledLink to="/articles">
+            <StyledListItemButton>
+              <ListItemIcon>
+                <ExploreOutlined />
+              </ListItemIcon>
+              <ListItemText primary=" Исследовать" sx={{ ml: -2 }} />
+            </StyledListItemButton>
+          </StyledLink>
         </StyledListItem>
 
         <StyledListItem>
-          <StyledListItemButton>
-            <ListItemIcon>
-              <ExploreOutlined />
-            </ListItemIcon>
-            <ListItemText primary=" Исследовать" />
-          </StyledListItemButton>
+          <StyledLink to="/users">
+            <StyledListItemButton>
+              <ListItemIcon>
+                <FormatListBulleted />
+              </ListItemIcon>
+              <ListItemText primary="Пользователи" sx={{ ml: -2 }} />
+            </StyledListItemButton>
+          </StyledLink>
         </StyledListItem>
 
         <StyledListItem>
-          <StyledListItemButton>
-            <ListItemIcon>
-              <FormatListBulleted />
-            </ListItemIcon>
-            <ListItemText primary="Подписки" />
-          </StyledListItemButton>
-        </StyledListItem>
-
-        <StyledListItem>
-          <StyledListItemButton>
-            <ListItemIcon>
-              <BookmarkBorderOutlined />
-            </ListItemIcon>
-            <ListItemText primary="Закладки" />
-          </StyledListItemButton>
+          <StyledLink to="/settings">
+            <StyledListItemButton>
+              <ListItemIcon>
+                <Settings />
+              </ListItemIcon>
+              <ListItemText primary="Настройки" sx={{ ml: -2 }} />
+            </StyledListItemButton>
+          </StyledLink>
         </StyledListItem>
 
         <StyledListItem>
@@ -98,6 +106,7 @@ const Navbar: FC<IProps> = ({ mode, setMode }) => {
               <DarkModeOutlined />
             </ListItemIcon>
             <Switch
+              sx={{ ml: -2 }}
               onClick={handleClick}
               checked={mode === "dark" ? true : false}
             />

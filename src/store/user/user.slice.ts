@@ -1,15 +1,19 @@
-import { IUser } from "./../../types/IUser"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { fetchUsers } from "./user.actions"
+import { IUser } from "../../types/types"
+import { getUserById, getUsers } from "./user.actions"
 
 interface IUserState {
   users: IUser[]
+  user: IUser | null
+  total: number
   isLoading: boolean
   error: string
 }
 
 const initialState: IUserState = {
   users: [],
+  user: null,
+  total: 0,
   isLoading: false,
   error: "",
 }
@@ -19,15 +23,32 @@ export const userSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: {
-    [fetchUsers.fulfilled.type]: (state, action: PayloadAction<IUser[]>) => {
+    [getUsers.fulfilled.type]: (
+      state,
+      action: PayloadAction<{ items: IUser[]; total: number }>
+    ) => {
       state.isLoading = false
       state.error = ""
-      state.users = action.payload
+      state.users = action.payload.items
+      state.total = action.payload.total
     },
-    [fetchUsers.pending.type]: (state, action) => {
+    [getUsers.pending.type]: (state) => {
       state.isLoading = true
     },
-    [fetchUsers.rejected.type]: (state, action: PayloadAction<string>) => {
+    [getUsers.rejected.type]: (state, action: PayloadAction<string>) => {
+      state.isLoading = false
+      state.error = action.payload
+    },
+
+    [getUserById.fulfilled.type]: (state, action: PayloadAction<IUser>) => {
+      state.isLoading = false
+      state.error = ""
+      state.user = action.payload
+    },
+    [getUserById.pending.type]: (state) => {
+      state.isLoading = true
+    },
+    [getUserById.rejected.type]: (state, action: PayloadAction<string>) => {
       state.isLoading = false
       state.error = action.payload
     },
