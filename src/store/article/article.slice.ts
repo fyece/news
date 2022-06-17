@@ -1,6 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { IArticle } from "../../types/types"
-import { fetchArticles, getArticleById, searchArticle } from "./article.actions"
+import {
+  deleteArticle,
+  fetchArticles,
+  getArticleById,
+  searchArticle,
+} from "./article.actions"
 
 interface IArticleState {
   articles: IArticle[]
@@ -70,6 +75,18 @@ export const articleSlice = createSlice({
       state.isLoading = true
     },
     [searchArticle.rejected.type]: (state, action: PayloadAction<string>) => {
+      state.isLoading = false
+      state.error = action.payload
+    },
+
+    [deleteArticle.fulfilled.type]: (state) => {
+      state.isLoading = false
+      state.error = ""
+    },
+    [deleteArticle.pending.type]: (state) => {
+      state.isLoading = true
+    },
+    [deleteArticle.rejected.type]: (state, action: PayloadAction<string>) => {
       state.isLoading = false
       state.error = action.payload
     },

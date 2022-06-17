@@ -13,7 +13,7 @@ export const login = createAsyncThunk(
       const userData = await AuthApi.login(dto)
       return userData
     } catch (e) {
-      return thunkAPI.rejectWithValue("Не удалось войти в аккаунт")
+      return thunkAPI.rejectWithValue("Неверный email или пароль")
     }
   }
 )
@@ -25,7 +25,9 @@ export const register = createAsyncThunk(
       const userData = await AuthApi.register(dto)
       return userData
     } catch (e) {
-      return thunkAPI.rejectWithValue("Не удалось создать аккаунт")
+      return thunkAPI.rejectWithValue(
+        "Пользователь с таким email уже существует"
+      )
     }
   }
 )

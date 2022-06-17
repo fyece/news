@@ -14,6 +14,7 @@ const ArticlePage = () => {
   const user = useAppSelector((state) => state.authReducer.user)
   const article = useAppSelector((state) => state.articleReducer.currentArticle)
   const isAuth = !!user
+  const isOwner = user?.id === article?.user.id
 
   const articleId = match?.params.id || 0
 
@@ -24,7 +25,7 @@ const ArticlePage = () => {
   return (
     <>
       <Stack spacing={2} sx={{ minWidth: "640px", maxWidth: "640px" }}>
-        <Article article={article} />
+        <Article article={article} isOwner={isOwner} />
         <CommentSection isAuth={isAuth} articleId={article?.id || 0} />
       </Stack>
     </>

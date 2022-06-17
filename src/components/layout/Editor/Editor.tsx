@@ -18,6 +18,7 @@ const Editor: React.FC<EditorProps> = ({ onChange, startBlocks }) => {
       placeholder: "Введите текст вашей статьи",
       tools: {
         // header: Header,
+
         simpleImage: SimpleImage,
       },
       data: {

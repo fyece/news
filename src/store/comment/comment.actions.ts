@@ -43,3 +43,16 @@ export const removeComment = createAsyncThunk(
     }
   }
 )
+
+export const editComment = createAsyncThunk(
+  "comment/editComment",
+  async ([id, dto, token]: [number, IComment, string], thunkAPI) => {
+    try {
+      await CommentApi.edit(id, dto, token)
+      const data = await CommentApi.getComments(dto.article.id)
+      return data
+    } catch (e) {
+      return thunkAPI.rejectWithValue("Не удалось изменить комментарий")
+    }
+  }
+)

@@ -6,7 +6,7 @@ import { useCookies } from "react-cookie"
 // import { ILoginUserDto } from "../../../types/types"
 import { login } from "../../../store/auth/auth.actions"
 import { useAppDispatch, useAppSelector } from "../../../utils/hooks/redux"
-import { Box, Button, Stack, TextField, Typography } from "@mui/material"
+import { Alert, Button, Stack, TextField, Typography } from "@mui/material"
 
 interface IFormInputs {
   email: string
@@ -29,6 +29,7 @@ interface IProps {
 
 const LoginForm: FC<IProps> = ({ toRegister }) => {
   const dispatch = useAppDispatch()
+  const error = useAppSelector((state) => state.authReducer.error)
   const {
     register,
     handleSubmit,
@@ -73,6 +74,12 @@ const LoginForm: FC<IProps> = ({ toRegister }) => {
             {...register("password")}
           />
 
+          {error && (
+            <Alert severity="error" sx={{ width: "100%", pr: 0, pl: 1 }}>
+              {error}
+            </Alert>
+          )}
+
           <Button
             type="submit"
             variant="contained"
@@ -98,7 +105,6 @@ const LoginContainer: React.FC<IProps> = ({ toRegister }) => {
     path: "/",
     maxAge: 30 * 24 * 60 * 60,
   })
-  console.log(cookies.token)
 
   return <LoginForm toRegister={toRegister} />
 }

@@ -59,8 +59,12 @@ export const ArticleApi = {
     return data
   },
 
-  async deleteArticle(id: number) {
-    const { data } = await instance.delete(`${id}`)
+  async deleteArticle(id: number, token: string) {
+    const { data } = await instance.delete(`${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
     return data
   },
 }

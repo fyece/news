@@ -33,4 +33,14 @@ export const CommentApi = {
       },
     })
   },
+
+  async edit(id: number, dto: IComment, token: string) {
+    console.log()
+
+    return instance.patch<number, { data: IComment }>(`/comments/${id}`, dto, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+  },
 }

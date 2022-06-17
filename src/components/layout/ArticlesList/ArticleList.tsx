@@ -1,9 +1,7 @@
-import React, { useEffect } from "react"
-import { Skeleton, Stack } from "@mui/material"
+import React from "react"
+import { Stack } from "@mui/material"
 
 import ArticleItem from "../../ArticleItem/ArticleItem"
-import { useAppDispatch, useAppSelector } from "../../../utils/hooks/redux"
-import { fetchArticles } from "../../../store/article/article.actions"
 import { IArticle } from "../../../types/types"
 
 interface IArticleListProps {

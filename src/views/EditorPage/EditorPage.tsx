@@ -67,6 +67,7 @@ export const WriteForm: React.FC<IWriteFormProps> = ({ data }) => {
         </Box>
       </Box>
       <Button
+        variant="contained"
         disabled={isLoading || blocks.length === 0 || !title}
         onClick={onAddArticle}
       >

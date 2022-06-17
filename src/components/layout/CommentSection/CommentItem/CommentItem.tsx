@@ -4,6 +4,7 @@ import { Box, Stack, Typography } from "@mui/material"
 import { IComment } from "../../../../types/types"
 import EditDeleteButton from "../../../common/EditDeleteButton/EditDeleteButton"
 import AvatarNameDate from "../../../common/AvatarNameDate/AvatarNameDate"
+import EditCommentForm from "../../../forms/EditCommentForm/EditCommentForm"
 
 interface ICommentItemProps {
   data: IComment
@@ -11,6 +12,7 @@ interface ICommentItemProps {
 }
 
 const CommentItem: React.FC<ICommentItemProps> = ({ data, currentUser }) => {
+  const [editMode, setEditMode] = React.useState(false)
   const user = {
     id: data.user.id,
     fullName: data.user.fullName,
@@ -30,9 +32,18 @@ const CommentItem: React.FC<ICommentItemProps> = ({ data, currentUser }) => {
           id={user.id}
           date={data.createdAt}
         />
-        {data.user.id === currentUser && <EditDeleteButton data={data} />}
+
+        {/* replace with isOwner here */}
+
+        {data.user.id === currentUser && (
+          <EditDeleteButton comment={data} setEditMode={setEditMode} />
+        )}
       </Box>
-      <Typography>{data.text}</Typography>
+      {editMode ? (
+        <EditCommentForm comment={data} setEditMode={setEditMode} />
+      ) : (
+        <Typography>{data.text}</Typography>
+      )}
     </Stack>
   )
 }

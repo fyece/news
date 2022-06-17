@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
 import { useCookies } from "react-cookie"
-import { Box, Button, Stack, TextField, Typography } from "@mui/material"
+import { Alert, Box, Button, Stack, TextField, Typography } from "@mui/material"
 import { register as registerUser } from "../../../store/auth/auth.actions"
 import { useAppDispatch, useAppSelector } from "../../../utils/hooks/redux"
 
@@ -28,14 +28,15 @@ const schema = yup
   })
   .required()
 
-interface IProps {
+interface IRegisterFormProps {
   toLogin: () => void
 }
 
-const RegisterForm: FC<IProps> = ({ toLogin }) => {
+const RegisterForm: FC<IRegisterFormProps> = ({ toLogin }) => {
   const [cookies, setCookie] = useCookies(["token"])
   const dispatch = useAppDispatch()
   const userData = useAppSelector((state) => state.authReducer.user)
+  const error = useAppSelector((state) => state.authReducer.error)
 
   const {
     register,
@@ -93,6 +94,12 @@ const RegisterForm: FC<IProps> = ({ toLogin }) => {
             helperText={errors.password?.message}
             {...register("password")}
           />
+
+          {error && (
+            <Alert severity="error" sx={{ width: "100%", pr: 0, pl: 1 }}>
+              {error}
+            </Alert>
+          )}
 
           <Button
             type="submit"

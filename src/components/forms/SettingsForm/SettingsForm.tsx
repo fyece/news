@@ -6,6 +6,7 @@ import { Box, Button, Stack, TextField } from "@mui/material"
 import { IUpdateUserDto } from "../../../types/types"
 import { useAppDispatch, useAppSelector } from "../../../utils/hooks/redux"
 import { getMe, login, updateMe } from "../../../store/auth/auth.actions"
+import AvatarColored from "../../common/AvatarColored/AvatarColored"
 
 interface IFormInputs {
   fullName: string
@@ -40,23 +41,27 @@ const SettingsForm = () => {
   })
   const onSubmit = async (data: IUpdateUserDto) => {
     await dispatch(updateMe([token, data]))
-    // await dispatch(getMe(token))
   }
   return (
     <Box sx={{ minWidth: "640px" }}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Stack spacing={2}>
-          <TextField
-            error={errors.fullName ? true : false}
-            id="standard-basic"
-            label="Имя"
-            variant="outlined"
-            helperText={errors.fullName?.message}
-            {...register("fullName")}
-          />
+        <Stack spacing={3}>
+          <Stack
+            direction="row"
+            spacing={2}
+            sx={{ alignItems: "center", width: "100%" }}
+          >
+            <AvatarColored fullName={currentUser?.fullName || ""} size="64px" />
+            <TextField
+              error={errors.fullName ? true : false}
+              label="Имя"
+              variant="outlined"
+              helperText={errors.fullName?.message}
+              {...register("fullName")}
+            />
+          </Stack>
           <TextField
             error={errors.bio ? true : false}
-            id="standard-basic"
             label="О себе"
             variant="outlined"
             multiline

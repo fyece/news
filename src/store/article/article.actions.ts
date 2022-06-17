@@ -1,4 +1,4 @@
-import axios from "axios"
+// import axios from "axios"
 import { createAsyncThunk } from "@reduxjs/toolkit"
 
 import { ArticleApi } from "../../utils/api/article.api"
@@ -8,10 +8,10 @@ import {
   ISearchArticleDto,
 } from "../../types/types"
 
-const instance = axios.create({
-  baseURL: "http://localhost:9999/",
-  withCredentials: true,
-})
+// const instance = axios.create({
+//   baseURL: "http://localhost:9999/",
+//   withCredentials: true,
+// })
 
 export const fetchArticles = createAsyncThunk(
   "article/fetchArticles",
@@ -75,12 +75,23 @@ export const updateArticle = createAsyncThunk(
     }
   }
 )
+// export const deleteArticle = createAsyncThunk(
+//   "article/deleteArticle",
+//   async (article: IArticle, thunkAPI) => {
+//     try {
+//       const response = await instance.delete(`articles/${article.id}`)
+//       return response.data
+//     } catch (e) {
+//       return thunkAPI.rejectWithValue("Не удалось удалить статью")
+//     }
+//   }
+// )
+
 export const deleteArticle = createAsyncThunk(
   "article/deleteArticle",
-  async (article: IArticle, thunkAPI) => {
+  async ([article, token]: [IArticle, string], thunkAPI) => {
     try {
-      const response = await instance.delete(`articles/${article.id}`)
-      return response.data
+      await ArticleApi.deleteArticle(article.id, token)
     } catch (e) {
       return thunkAPI.rejectWithValue("Не удалось удалить статью")
     }

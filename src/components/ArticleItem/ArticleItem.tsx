@@ -8,15 +8,14 @@ import {
   Visibility,
 } from "@mui/icons-material"
 import Image from "../common/Image/Image"
-import AvatarWithName from "../common/AvatarWithName/AvatarWithName"
 import { NavLink } from "react-router-dom"
 
 interface IArticleItemProps {
   id: number
   title: string
   description: string
-  imageUrl?: string
   views: number
+  imageUrl?: string
 }
 
 const ArticleItemActions = styled(Box)({
@@ -48,14 +47,13 @@ const ArticleItem: FC<IArticleItemProps> = ({
   id,
   title,
   description,
-  imageUrl,
   views,
+  imageUrl,
 }) => {
   return (
     <Paper elevation={0}>
       <Box p={2}>
         <Stack spacing={1}>
-          {/* <AvatarWithName user={author} /> */}
           <StyledLink to={`/articles/${id}`}>
             <Typography
               variant="h5"
@@ -73,11 +71,6 @@ const ArticleItem: FC<IArticleItemProps> = ({
           {imageUrl && <Image src={articleImage} height={476} width={640} />}
 
           <ArticleItemActions>
-            {/* <Checkbox
-              sx={{ padding: 0, margin: 0 }}
-              icon={<BookmarkBorderOutlined />}
-              checkedIcon={<BookmarkOutlined />}
-            /> */}
             <WatchCounter count={views} />
           </ArticleItemActions>
         </Stack>

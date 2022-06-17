@@ -6,6 +6,8 @@ import { Modal, styled } from "@mui/material"
 import LoginForm from "../forms/LoginForm/LoginForm"
 import RegisterForm from "../forms/RegisterForm/RegisterForm"
 import { Login } from "@mui/icons-material"
+import { useAppDispatch } from "../../utils/hooks/redux"
+import { clearError } from "../../store/auth/auth.slice"
 
 const style = {
   position: "absolute",
@@ -26,6 +28,7 @@ const style = {
 // }))
 
 const LoginButton = () => {
+  const dispatch = useAppDispatch()
   const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
@@ -41,12 +44,28 @@ const LoginButton = () => {
       >
         Войти
       </Button>
-      <Modal open={open} onClose={handleClose}>
+      <Modal
+        open={open}
+        onClose={() => {
+          handleClose()
+          dispatch(clearError())
+        }}
+      >
         <Box sx={style}>
           {toRegister ? (
-            <RegisterForm toLogin={() => setToRegister(false)} />
+            <RegisterForm
+              toLogin={() => {
+                dispatch(clearError())
+                setToRegister(false)
+              }}
+            />
           ) : (
-            <LoginForm toRegister={() => setToRegister(true)} />
+            <LoginForm
+              toRegister={() => {
+                dispatch(clearError())
+                setToRegister(true)
+              }}
+            />
           )}
         </Box>
       </Modal>

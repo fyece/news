@@ -1,20 +1,18 @@
 import React from "react"
-import { Paper, Stack, styled, Typography } from "@mui/material"
+import { Box, Paper, Stack, Typography } from "@mui/material"
 
 import AvatarWithName from "../../common/AvatarWithName/AvatarWithName"
 import { IArticle } from "../../../types/types"
 import Image from "../../common/Image/Image"
 import RelativeDate from "../../common/RelativeDate/RelativeDate"
-
-const HeaderTypography = styled(Typography)({
-  fontWeight: "500",
-})
+import EditDeleteButton from "../../common/EditDeleteButton/EditDeleteButton"
 
 interface IArticleProps {
   article: IArticle | null
+  isOwner: boolean
 }
 
-const Article: React.FC<IArticleProps> = ({ article }) => {
+const Article: React.FC<IArticleProps> = ({ article, isOwner }) => {
   const author = {
     id: article?.user.id || 0,
     fullName: article?.user.fullName || "name",
@@ -23,11 +21,23 @@ const Article: React.FC<IArticleProps> = ({ article }) => {
     <>
       <Paper elevation={0}>
         <Stack p={2} spacing={2}>
-          <Stack direction="row" spacing={1}>
-            <AvatarWithName user={author} />
-            <RelativeDate date={article?.createdAt || ""} />
-          </Stack>
-          <HeaderTypography variant="h5">{article?.title}</HeaderTypography>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Stack direction="row" spacing={1}>
+              <AvatarWithName user={author} />
+              <RelativeDate date={article?.createdAt || ""} />
+            </Stack>
+            {isOwner ? <EditDeleteButton article={article} /> : null}
+          </Box>
+
+          <Typography variant="h5" sx={{ fontWeight: "500" }}>
+            {article?.title}
+          </Typography>
           <Stack spacing={1}>
             {article?.body.map((obj) => {
               if (obj.type === "paragraph") {

@@ -32,14 +32,14 @@ const App = () => {
       path: "/",
       maxAge: 30 * 24 * 60 * 60,
     })
-    // console.log(cookies.token)
   }, [userData?.token, setCookie, cookies.token])
 
   const darkTheme = createTheme({
     palette: {
       mode: mode,
       primary: {
-        main: "#6756ff",
+        // main: "#7995ba",
+        main: "#6b7d95",
       },
       secondary: {
         main: "#ffffff",
@@ -77,7 +77,6 @@ const App = () => {
             sx={{
               display: "flex",
               justifyContent: "center",
-              // alignItems: "center",
             }}
           >
             <Box p={2}>

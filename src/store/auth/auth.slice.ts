@@ -21,6 +21,9 @@ export const authSlice = createSlice({
     logout(state: IAuthState) {
       state.user = null
     },
+    clearError(state: IAuthState) {
+      state.error = ""
+    },
   },
   extraReducers: {
     [register.fulfilled.type]: (
@@ -86,7 +89,7 @@ export const authSlice = createSlice({
   },
 })
 
-export const { logout } = authSlice.actions
+export const { logout, clearError } = authSlice.actions
 const authReducer = authSlice.reducer
 
 export default authReducer

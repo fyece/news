@@ -15,12 +15,14 @@ import userReducer from "./user/user.slice"
 import articleReducer from "./article/article.slice"
 import commentReducer from "./comment/comment.slice"
 import authReducer from "./auth/auth.slice"
+import appReducer from "./app/app.slice"
 
 const rootReducer = combineReducers({
   userReducer,
   articleReducer,
   commentReducer,
   authReducer,
+  appReducer,
 })
 
 const persistConfig = {
